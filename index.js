@@ -21,3 +21,28 @@ conn.connect(function (err) {
         console.log("Conexión exitosa a base de datos");
     }
 });
+
+app.get("/centrosPoblados/get", function (request, response) {
+    var query = "SELECT * FROM inventariotest.centrospoblados";
+    conn.query(query, function (err, resultado) {
+        if (err) {
+            console.log(err);
+        } else {
+            response.json(resultado);
+        }
+    });
+});
+
+
+app.get("/centrosPoblados/get/:id", function (request, response) {
+        var idCentroPoblado = request.params.id;
+        var query = "SELECT * FROM inventariotest.centrospoblados where idCentroPoblado =?";
+        var parametros = [idCentroPoblado];
+        conn.query(query, parametros, function (err, resultado) {
+            if (err) {
+                console.log(err);
+            } else {
+                response.json(resultado);
+            }
+        });
+});
