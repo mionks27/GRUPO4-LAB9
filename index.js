@@ -220,10 +220,10 @@ app.get("/categoriasEquipo/get/:id",function (request,response) {
 });
 
 //localhost:8080/categoriasEquipo/get
-app.get("/categoriasEquipo/get/",function (request,response) {
+app.get("/categoriasEquipo/get",function (request,response) {
     var id = request.params.id;
-    var query1 = "select * from categoriaequipo";
-    conn.query(query1, parametro, function (err, resultado) {
+    var query1 = "SELECT * FROM inventariotest.categoriaequipo";
+    conn.query(query1,  function (err, resultado) {
         if (err) {
             console.log(err);
         } else {
@@ -291,6 +291,6 @@ app.get("/sitios/get",function (request,response) {
     })
 });
 
-app.listen(8080,function () {
+app.listen(3000,function () {
     console.log("servidor levantado exitosamente");
 });
