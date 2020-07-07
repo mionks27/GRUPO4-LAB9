@@ -220,7 +220,7 @@ app.get("/categoriasEquipo/get/:id",function (request,response) {
 });
 
 //localhost:8080/categoriasEquipo/get
-app.get("/categoriasEquipo/get",function (request,response) {
+app.get("/categoriasEquipo/get/",function (request,response) {
     var id = request.params.id;
     var query1 = "select * from categoriaequipo";
     conn.query(query1, parametro, function (err, resultado) {
@@ -289,8 +289,8 @@ app.get("/sitios/get",function (request,response) {
             response.json(resultado);
         }
     })
-})
+});
 
 app.listen(8080,function () {
     console.log("servidor levantado exitosamente");
-})
+});
