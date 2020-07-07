@@ -205,33 +205,91 @@ app.post("/equipos/create", function(request, response){
     });
 });
 
-
 //localhost:8080/categoriasEquipo/get/{id}
 app.get("/categoriasEquipo/get/:id",function (request,response) {
     var id = request.params.id;
-    var query1 = "select * from categoriaequipo";
     var query2 = "select * from categoriaequipo c where c.idCategoriaEquipo = ?";
     var parametro = id;
-
-    if (id == null) {
-        conn.query(query1, function (err, resultado) {
-            if (err) {
-                console.log(err);
-            } else {
-                response.json(resultado);
-            }
-        })
-    } else {
-        conn.query(query2, parametro, function (err, resultado) {
-            if (err) {
-                console.log(err);
-            } else {
-                response.json(resultado);
-            }
-        })
-    }
-
+    conn.query(query2,parametro, function (err, resultado) {
+        if (err) {
+            console.log(err);
+        } else {
+            response.json(resultado);
+        }
+    })
 });
+
+//localhost:8080/categoriasEquipo/get
+app.get("/categoriasEquipo/get",function (request,response) {
+    var id = request.params.id;
+    var query1 = "select * from categoriaequipo";
+    conn.query(query1, parametro, function (err, resultado) {
+        if (err) {
+            console.log(err);
+        } else {
+            response.json(resultado);
+        }
+    })
+});
+
+
+//localhost:8080/categoriasEquipo/create
+app.post("/categoriasEquipo/create",function (request,response) {
+    var nombreCategoria = request.body.nombreCategoriaEquipo;
+    var query1 = "INSERT INTO categoriaequipo (`nombre`) VALUES (?)";
+    var query2 = "SELECT * FROM categoriaequipo c where c.nombre = ?";
+    conn.query(query1,nombreCategoria,function (err,resultado) {
+        if (err){
+            console.log(err);
+        }else {
+            conn.query(query2,nombreCategoria,function (err,resultado) {
+                if (err){
+                    console.log(err);
+                }else {
+                    response.json(resultado);
+                }
+            })
+        }
+    })
+});
+
+//localhost:8080/categoriasEquipo/update
+app.post("/categoriasEquipo/update",function (request,response) {
+    var nombreCategoria = request.body.nombreCategoriaEquipo;
+    var id = request.body.idCategoriaEquipo;
+    var query1 = "UPDATE categoriaequipo SET nombre = ? WHERE (idCategoriaEquipo = ?)";
+    var parametros = [nombreCategoria,id];
+    var query2 = "SELECT * FROM categoriaequipo c where c.nombre = ?";
+    conn.query(query1,parametros,function (err,resultado) {
+        if (err){
+            console.log(err);
+        }else {
+            conn.query(query2,nombreCategoria,function (err,resultado) {
+                if (err){
+                    console.log(err);
+                }else {
+                    response.json(resultado);
+                }
+            })
+        }
+    })
+});
+
+
+//localhost:8080/sitios/get
+app.get("/sitios/get",function (request,response) {
+    var query = "SELECT s.codigoSitio, s.idCentroPoblado, s.latitud, s.longitud, s.idSitio, cp.nombreCentroPoblado, count(eq.idequipo) as cantidadEquipos FROM sitios s \n" +
+        "inner join centrospoblados cp on s.idCentroPoblado = cp.idCentroPoblado\n" +
+        "inner join equipos eq on s.idSitio = eq.idSitio \n" +
+        "group by s.idSitio";
+    conn.query(query,function (err,resultado) {
+        if (err){
+            console.log(err);
+        }else {
+            response.json(resultado);
+        }
+    })
+})
 
 app.listen(8080,function () {
     console.log("servidor levantado exitosamente");
